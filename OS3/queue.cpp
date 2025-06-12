@@ -7,6 +7,14 @@ void* deep_copy_value(const void* src, size_t size) {
 	if (dst) memcpy(dst, src, size);
 	return dst;
 }
+// 노드 해제 (value도 해제)
+void free_node(Node* node, size_t value_size) {
+	if (node) {
+		if (node->item.value)
+			free(node->item.value); // 깊은 복사된 value 해제
+		delete node;
+	}
+}
 
 Queue* init(void) {
 	return NULL;
