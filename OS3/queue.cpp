@@ -50,7 +50,9 @@ Node* nalloc(Item item) {
 
 
 void nfree(Node* node) {
-	return;
+	if (!node) return;
+	if (node->item.value) free(node->item.value);
+	delete node;
 }
 
 
