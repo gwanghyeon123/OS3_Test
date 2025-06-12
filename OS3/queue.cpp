@@ -26,7 +26,14 @@ Queue* init(void) {
 
 
 void release(Queue* queue) {
-	return;
+	if (!queue) return;
+	Node* cur = queue->head;
+	while (cur) {
+		Node* next = cur->next;
+		free_node(cur, 0); // value_size는 모름, value는 free로 해제
+		cur = next;
+	}
+	delete queue;
 }
 
 
