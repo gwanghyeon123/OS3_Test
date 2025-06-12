@@ -17,7 +17,11 @@ void free_node(Node* node, size_t value_size) {
 }
 
 Queue* init(void) {
-	return NULL;
+	Queue* queue = new (std::nothrow) Queue;
+	if (!queue) return nullptr;
+	queue->head = nullptr;
+	queue->tail = nullptr;
+	return queue;
 }
 
 
