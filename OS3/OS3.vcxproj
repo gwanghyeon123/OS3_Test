@@ -127,7 +127,6 @@
     <ClInclude Include="queue.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="queue.cpp" />
   </ItemGroup>
