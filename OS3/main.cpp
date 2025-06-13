@@ -89,7 +89,7 @@ int main(void) {
 	cout << "sum of returned values = " << sum_value << endl;
 
 	// 진짜로 필요한 코드
-	// total_average_response_time = total_response_time / n_cleint;
+	//total_average_response_time = total_response_time / n_cleint;
 	// printf("total average response time = ....
 	return 0;
 }
