@@ -31,6 +31,7 @@ void client_func(Queue* queue, Request requests[], int n_request) {
 
 	// start_time = .....
 
+
 	for (int i = 0; i < n_request; i++) {
 		if (requests[i].op == GET) {
 			reply = dequeue(queue);
@@ -40,12 +41,10 @@ void client_func(Queue* queue, Request requests[], int n_request) {
 		}
 
 		if (reply.success) {
-			// 단순히 리턴받은 키 값을 더함(아무 의미 없음)
 			sum_key += reply.item.key;
-			sum_value += (int)reply.item.value; // void*에서 다시 int로 변환
-
-			// 리턴받은 key, value 값 검증
-			// ...생략...
+			if (reply.item.value)
+				sum_value += *(int*)(reply.item.value);
+			free(reply.item.value); // 메모리 해제
 		}
 		else {
 			// noop
@@ -69,7 +68,10 @@ int main(void) {
 	for (int i = 0; i < REQUEST_PER_CLINET / 2; i++) {
 		requests[i].op = SET;
 		requests[i].item.key = i;
-		requests[i].item.value = (void*)(rand() % 1000000);
+
+		int*value_ptr=new int(rand() % 1000000);
+		requests[i].item.value = static_cast<void*>(value_ptr);
+		requests[i].item.value_size = sizeof(int);
 	}
 	for (int i = REQUEST_PER_CLINET / 2; i < REQUEST_PER_CLINET; i++) {
 		requests[i].op = GET;
