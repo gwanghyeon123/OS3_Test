@@ -36,13 +36,13 @@ void release(Queue* queue) {
 	Node* cur = queue->head;
 	while (cur) {
 		Node* next = cur->next;
-		free_node(cur, 0); // value_size는 모름, value는 free로 해제
+		nfree(cur);
 		cur = next;
 	}
 	delete queue;
 }
 
-
+	
 Node* nalloc(Item item) {
 	// Node 생성, item으로 초기화
 	Node* node = new (std::nothrow) Node;
