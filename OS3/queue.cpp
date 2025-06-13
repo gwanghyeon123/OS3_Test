@@ -57,14 +57,46 @@ void nfree(Node* node) {
 
 
 Node* nclone(Node* node) {
-	return NULL;
+	if (!node) return nullptr;
+	return nalloc(node->item);
 }
 
 
 Reply enqueue(Queue* queue, Item item) {
-	Reply reply = { false, NULL };
+	Reply reply = { false, {0, nullptr, 0} };
+	if (!queue) return reply;
+	std::lock_guard<std::mutex> lock(queue->mtx);
+
+	Node* prev = nullptr;
+	Node* cur = queue->head;
+
+	while (cur && item.key < cur->item.key) {
+		prev = cur;
+		cur = cur->next;
+	}
+	if (cur && item.key == cur->item.key) {
+		if (cur->item.value) free(cur->item.value);
+		cur->item.value = deep_copy_value(item.value, item.value_size);
+		cur->item.value_size = item.value_size;
+		reply.success = true;
+		reply.item.key = cur->item.key;
+		reply.item.value_size = cur->item.value_size;
+		reply.item.value = deep_copy_value(cur->item.value, cur->item.value_size);
+		return reply;
+	}
+	Node* node = nalloc(item);
+	if (!node) return reply;
+	node->next = cur;
+	if (!prev) queue->head = node;
+	else prev->next = node;
+	if (!cur) queue->tail = node;
+	reply.success = true;
+	reply.item.key = node->item.key;
+	reply.item.value_size = node->item.value_size;
+	reply.item.value = deep_copy_value(node->item.value, node->item.value_size);
 	return reply;
 }
+
 
 Reply dequeue(Queue* queue) {
 	Reply reply = { false, NULL };
