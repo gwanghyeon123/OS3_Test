@@ -1,4 +1,6 @@
 #include <iostream>
+#include<new>
+#include<cstdlib>
 #include "queue.h"
 // 깊은 복사 함수: value가 가리키는 메모리(1~1KB)를 복제
 static void* deep_copy_value(const void* src, size_t size) {

@@ -1,6 +1,6 @@
 #ifndef _QTYPE_H  // header guard
 #define _QTYPE_H
-
+#include<mutex>
 // ==========이 파일은 수정 가능==========
 
 typedef unsigned int Key;  // 값이 클수록 높은 우선순위
