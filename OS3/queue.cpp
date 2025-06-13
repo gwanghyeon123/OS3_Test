@@ -68,7 +68,7 @@ Node* nclone(Node* node) {
 
 Reply enqueue(Queue* queue, Item item) {
 	Reply reply = { false, {0, nullptr, 0} };
-	if (!queue) return reply;
+	if (!queue||item.value_size<=0) return reply;
 	std::lock_guard<std::mutex> lock(queue->mtx);
 
 	Node* prev = nullptr;
@@ -90,6 +90,7 @@ Reply enqueue(Queue* queue, Item item) {
 	}
 	Node* node = nalloc(item);
 	if (!node) return reply;
+	
 	node->next = cur;
 	if (!prev) queue->head = node;
 	else prev->next = node;
@@ -110,6 +111,7 @@ Reply dequeue(Queue* queue) {
 	if (!queue->head) return reply;
 	Node* node = queue->head;
 	queue->head = node->next;
+	
 	if (!queue->head) queue->tail = nullptr;
 
 	reply.success = true;
