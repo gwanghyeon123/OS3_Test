@@ -99,9 +99,23 @@ Reply enqueue(Queue* queue, Item item) {
 
 
 Reply dequeue(Queue* queue) {
-	Reply reply = { false, NULL };
+	Reply reply = { false, {0, nullptr, 0} };
+	if (!queue) return reply;
+	std::lock_guard<std::mutex> lock(queue->mtx);
+
+	if (!queue->head) return reply;
+	Node* node = queue->head;
+	queue->head = node->next;
+	if (!queue->head) queue->tail = nullptr;
+
+	reply.success = true;
+	reply.item.key = node->item.key;
+	reply.item.value_size = node->item.value_size;
+	reply.item.value = deep_copy_value(node->item.value, node->item.value_size);
+	nfree(node);
 	return reply;
 }
+
 
 Queue* range(Queue* queue, Key start, Key end) {
 	return NULL;
